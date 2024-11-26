@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Sistema Circulatório</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    .quiz-container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .question {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+    .options button {
+      display: block;
+      width: 100%;
+      margin: 5px 0;
+      padding: 10px;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      background-color: #f9f9f9;
+    }
+    .options button:hover {
+      background-color: #e0e0e0;
+    }
+    .feedback {
+      font-size: 1em;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .feedback.correct {
+      color: green;
+    }
+    .feedback.incorrect {
+      color: red;
+    }
+    .nav-buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <div id="question-container">
+      <!-- Perguntas serão exibidas aqui -->
+    </div>
+    <div class="nav-buttons">
+      <button id="prev-btn" onclick="prevQuestion()">Anterior</button>
+      <button id="next-btn" onclick="nextQuestion()" class="hidden">Próxima</button>
+    </div>
+    <div id="score-container" class="hidden"></div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        [
+  {
+    "question": "Um paciente apresenta insuficiência cardíaca, com aumento do volume sanguíneo nas veias. Qual propriedade do sistema venoso explica sua capacidade de acomodar esse volume sem elevações drásticas na pressão?",
+    "options": [
+      "Alta complacência",
+      "Baixa resistência vascular",
+      "Alta viscosidade sanguínea",
+      "Grande comprimento dos vasos"
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Durante um episódio de choque séptico, a pressão arterial sistêmica cai significativamente. Como a complacência arterial contribui para essa situação?",
+    "options": [
+      "Facilitando o retorno venoso",
+      "Aumentando a resistência periférica",
+      "Reduzindo a capacidade de manter pressão diante de volumes reduzidos",
+      "Aumentando o fluxo sanguíneo laminar"
+    ],
+    "correctAnswer": 2
+  },
+  {
+    "question": "Um paciente com hipertensão crônica apresenta aumento da resistência vascular periférica. Qual mudança estrutural nos vasos contribui para esse aumento?",
+    "options": [
+      "Redução no diâmetro do vaso",
+      "Aumento na complacência venosa",
+      "Redução na viscosidade do sangue",
+      "Aumento no comprimento dos vasos"
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Durante a avaliação de um paciente com insuficiência respiratória, observa-se fluxo turbulento nas vias aéreas superiores. Segundo a lei de Poiseuille, qual fator é o principal contribuinte para essa turbulência?",
+    "options": [
+      "Aumento do raio do vaso",
+      "Elevação da viscosidade do sangue",
+      "Aumento da velocidade do fluxo",
+      "Redução do comprimento do vaso"
+    ],
+    "correctAnswer": 2
+  },
+  {
+    "question": "Um paciente com policitemia apresenta hematócrito elevado. Como isso afeta o fluxo sanguíneo, de acordo com a lei de Poiseuille?",
+    "options": [
+      "Aumenta a resistência devido à maior viscosidade",
+      "Reduz o comprimento do vaso necessário para o fluxo",
+      "Diminui a pressão arterial média",
+      "Facilita o fluxo laminar"
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Uma paciente grávida apresenta varizes. Qual propriedade do sistema venoso contribui para o desenvolvimento dessas dilatações?",
+    "options": [
+      "Alta complacência",
+      "Alta resistência vascular",
+      "Baixa viscosidade do sangue",
+      "Redução do fluxo turbulento"
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Um paciente obeso apresenta aumento do comprimento total de vasos sanguíneos. Como isso afeta a resistência vascular sistêmica?",
+    "options": [
+      "Reduz a resistência devido ao maior diâmetro dos vasos",
+      "Aumenta a resistência devido ao maior comprimento",
+      "Não altera a resistência, pois o fluxo permanece laminar",
+      "Aumenta a complacência dos vasos arteriais"
+    ],
+    "correctAnswer": 1
+  },
+  {
+    "question": "Uma criança com estenose aórtica apresenta aumento da pós-carga no ventrículo esquerdo. Qual propriedade vascular influencia diretamente essa condição?",
+    "options": [
+      "Baixa complacência arterial",
+      "Alta resistência periférica",
+      "Grande comprimento dos vasos",
+      "Fluxo laminar constante"
+    ],
+    "correctAnswer": 1
+  },
+  {
+    "question": "Após uma hemorragia significativa, ocorre vasoconstrição para manter a pressão arterial. Como a redução do raio dos vasos afeta o fluxo, de acordo com a lei de Poiseuille?",
+    "options": [
+      "Aumenta o fluxo devido à redução da resistência",
+      "Reduz o fluxo exponencialmente devido à quarta potência do raio",
+      "Mantém o fluxo constante devido à viscosidade do sangue",
+      "Não afeta o fluxo, mas aumenta a complacência"
+    ],
+    "correctAnswer": 1
+  },
+  {
+    "question": "Um paciente com anemia apresenta aumento do débito cardíaco. Como a menor viscosidade sanguínea contribui para essa alteração, segundo a lei de Poiseuille?",
+    "options": [
+      "Reduzindo a resistência vascular, facilitando o fluxo",
+      "Aumentando a resistência periférica",
+      "Diminuindo o retorno venoso",
+      "Aumentando a complacência arterial"
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Durante um exercício intenso, ocorre vasodilatação nas arteríolas dos músculos. Como essa alteração no raio dos vasos impacta o fluxo sanguíneo, segundo a lei de Poiseuille?",
+    "options": [
+      "Reduz o fluxo devido ao aumento da viscosidade",
+      "Aumenta o fluxo exponencialmente devido ao maior raio",
+      "Mantém o fluxo constante para evitar sobrecarga",
+      "Reduz a resistência sem impactar o fluxo"
+    ],
+    "correctAnswer": 1
+  },
+  {
+    "question": "Um paciente diabético desenvolve arteriosclerose, reduzindo a complacência arterial. Qual impacto isso tem na pressão arterial durante a sístole?",
+    "options": [
+      "Aumenta a pressão arterial sistólica",
+      "Reduz a pressão arterial diastólica",
+      "Facilita o retorno venoso",
+      "Diminui a pós-carga do coração"
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Uma criança com tetralogia de Fallot apresenta obstrução no trato de saída do ventrículo direito. Como a resistência vascular pulmonar elevada afeta o débito cardíaco direito?",
+    "options": [
+      "Aumenta o débito devido à redução do comprimento dos vasos",
+      "Reduz o débito devido ao aumento da resistência",
+      "Mantém o débito constante devido à alta complacência venosa",
+      "Facilita o fluxo sanguíneo para os pulmões"
+    ],
+    "correctAnswer": 1
+  },
+  {
+    "question": "Um paciente em choque hipovolêmico apresenta redução do volume sanguíneo circulante. Como a complacência venosa influencia o retorno venoso nesse caso?",
+    "options": [
+      "Reduzindo o volume estocado nas veias, aumentando o retorno venoso",
+      "Facilitando a vasodilatação, reduzindo a pressão arterial",
+      "Mantendo o fluxo constante devido à baixa resistência",
+      "Aumentando o volume de sangue nos capilares"
+    ],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Durante uma infusão de líquidos em um paciente desidratado, a pressão venosa central aumenta. Como a alta complacência venosa afeta a pressão arterial neste cenário?",
+    "options": [
+      "Amortece o aumento da pressão, mantendo-a constante",
+      "Reduz o retorno venoso, dificultando a perfusão tecidual",
+      "Aumenta a resistência periférica devido à vasoconstrição",
+      "Facilita o acúmulo de líquidos nos capilares"
+    ],
+    "correctAnswer": 0
+  }
+]
+
+    ];
+
+    let currentQuestionIndex = 0;
+    let correctAnswersFirstTry = 0;
+    let hasAnsweredCorrectly = false;
+
+    function showQuestion() {
+      const questionContainer = document.getElementById('question-container');
+      const currentQuestion = questions[currentQuestionIndex];
+      hasAnsweredCorrectly = false;  // Reset for the new question
+      questionContainer.innerHTML = `
+        <div class="question">${currentQuestion.question}</div>
+        <div class="options">
+          ${currentQuestion.options.map((option, index) => `
+            <button onclick="checkAnswer(${index})">${option}</button>
+          `).join('')}
+        </div>
+        <div id="feedback" class="feedback"></div>
+      `;
+    }
+
+    function checkAnswer(selectedOption) {
+      const feedbackElement = document.getElementById('feedback');
+      const optionButtons = document.querySelectorAll('.options button');
+
+      if (!hasAnsweredCorrectly) {
+        if (selectedOption === questions[currentQuestionIndex].correctAnswer) {
+          feedbackElement.textContent = 'Correto!';
+          feedbackElement.classList.add('correct');
+          hasAnsweredCorrectly = true;  // Mark this question as correctly answered
+          correctAnswersFirstTry++;  // Count this as correct on the first try
+          // Desabilita todos os botões
+          optionButtons.forEach(button => {
+            button.disabled = true;
+          });
+          setTimeout(nextQuestion, 2000);
+        } else {
+          feedbackElement.textContent = 'Incorreto! Tente novamente.';
+          feedbackElement.classList.add('incorrect');
+        }
+      }
+    }
+
+    function nextQuestion() {
+      if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+        showQuestion();
+        document.getElementById('prev-btn').classList.remove('hidden');
+      } else {
+        showScore();
+      }
+    }
+
+    function prevQuestion() {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        showQuestion();
+      }
+      if (currentQuestionIndex === 0) {
+        document.getElementById('prev-btn').classList.add('hidden');
+      }
+    }
+
+    function showScore() {
+      const scoreContainer = document.getElementById('score-container');
+      const questionContainer = document.getElementById('question-container');
+      questionContainer.innerHTML = ''; // Hide the question container
+      scoreContainer.innerHTML = `
+        <div class="score">Você acertou ${correctAnswersFirstTry} de ${questions.length} questões de primeira!</div>
+      `;
+      scoreContainer.classList.remove('hidden');
+    }
+
+    // Inicializar quiz
+    showQuestion();
+  </script>
+</body>
+</html>
